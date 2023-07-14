@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/main/java/com/vincent/inc/Saturday/util/Http/ExceptionAdvice.java",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1689363885423,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1689363885423,
+            "name": "Commit-0",
+            "content": "package com.vincent.inc.Saturday.util.Http;\r\n\r\nimport org.springframework.beans.factory.annotation.Value;\r\nimport org.springframework.http.HttpStatusCode;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.ControllerAdvice;\r\nimport org.springframework.web.bind.annotation.ExceptionHandler;\r\nimport org.springframework.web.server.ResponseStatusException;\r\n\r\nimport lombok.extern.slf4j.Slf4j;\r\n\r\n@ControllerAdvice\r\n@Slf4j\r\npublic class ExceptionAdvice {\r\n\r\n    @Value(\"${spring.profiles.active}\")\r\n    private String env = \"?\";\r\n\r\n    private final String PROD = \"prod\";\r\n    \r\n    @ExceptionHandler(value = ResponseStatusException.class)\r\n    public ResponseEntity<HttpExceptionResponse> handleResponseStatus(ResponseStatusException ex) {\r\n        var response = new HttpExceptionResponse(ex);\r\n\r\n        log.error(ex.getMessage(), ex);\r\n\r\n        if(env.equals(PROD))\r\n            response.mask();\r\n        \r\n        return new ResponseEntity<HttpExceptionResponse>(response, null, response.getStatus().getValue());\r\n    }\r\n\r\n    @ExceptionHandler(value = Exception.class)\r\n    public ResponseEntity<HttpExceptionResponse> handleException(Exception ex) {\r\n        var response = new HttpExceptionResponse();\r\n        response.setMessage(HttpExceptionResponse.extractMessage(ex.getMessage()));\r\n        response.setLocalizedMessage(ex.getLocalizedMessage());\r\n        response.setStatus(new HttpStatus(HttpStatusCode.valueOf(500)));\r\n\r\n        log.error(ex.getMessage(), ex);\r\n\r\n        if(env.equals(PROD))\r\n            response.mask();\r\n        \r\n        return new ResponseEntity<HttpExceptionResponse>(response, null, response.getStatus().getValue());\r\n    }\r\n}\r\n"
+        }
+    ]
+}
