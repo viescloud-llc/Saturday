@@ -26,7 +26,7 @@ public class Organization {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<EUser> user;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
