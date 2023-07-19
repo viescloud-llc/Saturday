@@ -1,5 +1,7 @@
 package com.vincent.inc.Saturday.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -20,17 +22,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization { 
+public class Organization implements Serializable { 
     
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<EUser> user;
+    private List<EUser> users = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ERole> roles;
+    private List<ERole> roles = new ArrayList<>();;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private OrganizationProfile organizationProfile;

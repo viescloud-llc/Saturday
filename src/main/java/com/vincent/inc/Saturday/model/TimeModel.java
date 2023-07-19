@@ -1,5 +1,9 @@
 package com.vincent.inc.Saturday.model;
 
+import java.io.Serializable;
+
+import com.vincent.inc.Saturday.util.Time;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeModel {
+public class TimeModel extends Time implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

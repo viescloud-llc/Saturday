@@ -1,5 +1,6 @@
 package com.vincent.inc.Saturday.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import lombok.Data;
 @Table(name = "organization_profile")
 @Data
 @AllArgsConstructor
-public class OrganizationProfile {
+public class OrganizationProfile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.vincent.inc.Saturday.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeSheet {
+public class TimeSheet implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

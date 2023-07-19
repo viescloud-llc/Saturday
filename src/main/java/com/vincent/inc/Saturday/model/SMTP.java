@@ -1,5 +1,7 @@
 package com.vincent.inc.Saturday.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "smtp")
-public class SMTP {
+public class SMTP implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -84,7 +84,7 @@ public class DatabaseUtils<V, K> {
             return value;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            return null;
+            return value;
         }
     }
 
@@ -104,7 +104,7 @@ public class DatabaseUtils<V, K> {
             return value;
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
-            return null;
+            return value;
         }
     }
 
@@ -123,11 +123,11 @@ public class DatabaseUtils<V, K> {
 
     public V saveAndExpire(V value) {
         try {
-            var id = ReflectionUtils.getIdFieldValue(value);
             var saveValue = this.save(value);
+            var id = ReflectionUtils.getIdFieldValue(value);
             
             if (ObjectUtils.isEmpty(id))
-                return null;
+                return saveValue;
 
             var hashKey = String.format("%s.%s", this.hashes, id);
             this.redisTemplate.expire(hashKey, getTTLDuration());
