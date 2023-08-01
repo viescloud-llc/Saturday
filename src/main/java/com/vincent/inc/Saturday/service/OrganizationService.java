@@ -2,6 +2,9 @@ package com.vincent.inc.Saturday.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,26 +99,87 @@ public class OrganizationService {
 
     public Organization modifyOrganization(String id, Organization organization) {
         Organization oldOrganization = this.getById(id);
-
         ReflectionUtils.replaceValue(oldOrganization, organization);
+        oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
+        return oldOrganization;
+    }
+
+    public Organization modifyOrganization(String id, Organization organization, int userId) {
+        Organization oldOrganization = this.getById(id);
+
+        if(!this.isInOrganization(oldOrganization, userId))
+            HttpResponseThrowers.throwForbidden("User not allow to access this organization");
+
+        if(this.haveModifyOrganizationAllPermission(oldOrganization, userId)) {
+            ReflectionUtils.replaceValue(oldOrganization, organization);
+            oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
+            return oldOrganization;
+        }
+
+        if(this.haveModifyOrganizationProfilePermission(oldOrganization, userId))
+            oldOrganization.setOrganizationProfile(organization.getOrganizationProfile());
+
+        if(this.haveModifyOrganizationRolePermission(oldOrganization, userId))
+            oldOrganization.setRoles(organization.getRoles());
+
+        if(this.haveModifyOrganizationSmtpPermission(oldOrganization, userId))
+            oldOrganization.setSmtp(organization.getSmtp());
+
+        if(this.haveModifyOrganizationUserPermission(oldOrganization, userId))
+            oldOrganization.setUsers(organization.getUsers());
 
         oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
-
         return oldOrganization;
     }
 
     public Organization patchOrganization(String id, Organization organization) {
         Organization oldOrganization = this.getById(id);
+        ReflectionUtils.patchValue(oldOrganization, organization);
+        oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
+        return oldOrganization;
+    }
+
+    public Organization patchOrganization(String id, Organization organization, int userId) {
+        Organization oldOrganization = this.getById(id);
+
+        if(!this.isInOrganization(oldOrganization, userId))
+            HttpResponseThrowers.throwForbidden("User not allow to access this organization");
+
+        if(this.haveModifyOrganizationAllPermission(oldOrganization, userId)) {
+            ReflectionUtils.patchValue(oldOrganization, organization);
+            oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
+            return oldOrganization;
+        }
+
+        if(!this.haveModifyOrganizationProfilePermission(oldOrganization, userId))
+            organization.setOrganizationProfile(null);
+
+        if(!this.haveModifyOrganizationRolePermission(oldOrganization, userId))
+            organization.setRoles(null);
+
+        if(!this.haveModifyOrganizationSmtpPermission(oldOrganization, userId))
+            organization.setSmtp(null);
+
+        if(!this.haveModifyOrganizationUserPermission(oldOrganization, userId))
+            organization.setUsers(null);
 
         ReflectionUtils.patchValue(oldOrganization, organization);
-
         oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
-
         return oldOrganization;
     }
 
     public void deleteOrganization(String id) {
         this.databaseUtils.deleteById(id);
+    }
+
+    public void deleteOrganization(String id, int userId) {
+        Organization oldOrganization = this.getById(id);
+
+        if(!this.isInOrganization(oldOrganization, userId) || !this.haveModifyOrganizationAllPermission(oldOrganization, userId))
+            HttpResponseThrowers.throwForbidden("User not allow to access this organization or this action");
+        
+        oldOrganization.setDisable(true);
+        oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
     }
 
     public boolean isInOrganization(Organization organization ,int userId) {
@@ -131,5 +195,32 @@ public class OrganizationService {
 
     private void populateUser(OUser eUser, User user) {
         eUser.setUserProfile(user.getUserProfile());
+    }
+
+    private boolean haveModifyOrganizationAllPermission(Organization organization, int userId) {
+        var user = this.getOUser(organization, userId);
+        return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll());
+    }
+
+    private boolean haveModifyOrganizationUserPermission(Organization organization, int userId) {
+        var user = this.getOUser(organization, userId);
+        return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationUser());
+    }
+
+    private boolean haveModifyOrganizationRolePermission(Organization organization, int userId) {
+        var user = this.getOUser(organization, userId);
+        return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationRole());
+    }
+    private boolean haveModifyOrganizationProfilePermission(Organization organization, int userId) {
+        var user = this.getOUser(organization, userId);
+        return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isReadOrganizationProfile());
+    }
+    private boolean haveModifyOrganizationSmtpPermission(Organization organization, int userId) {
+        var user = this.getOUser(organization, userId);
+        return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationSmtp());
+    }
+
+    private OUser getOUser(Organization organization, int userId) {
+        return organization.getUsers().parallelStream().filter(e -> e.getId() == userId).collect(Collectors.toList()).get(0);
     }
 }

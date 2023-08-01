@@ -1,7 +1,6 @@
 package com.vincent.inc.Saturday.controller;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,7 @@ class OrganizationController {
     @Operation(summary = "Modify a Organization base on id in path variable")
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Organization> update(@PathVariable("id") String id, @RequestBody Organization organization) {
+    public ResponseEntity<Organization> update(@RequestHeader("user_id") int userId, @PathVariable("id") String id, @RequestBody Organization organization) {
         organization = this.organizationService.modifyOrganization(id, organization);
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ class OrganizationController {
     @Operation(summary = "Patch a Organization base on id in path variable")
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Organization> patch(@PathVariable("id") String id, @RequestBody Organization organization) {
+    public ResponseEntity<Organization> patch(@RequestHeader("user_id") int userId, @PathVariable("id") String id, @RequestBody Organization organization) {
         organization = this.organizationService.patchOrganization(id, organization);
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
@@ -81,8 +80,8 @@ class OrganizationController {
     @Operation(summary = "Delete a Organization base on id in path variable")
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<HttpStatus> delete(@PathVariable("id") String id) {
-        organizationService.deleteOrganization(id);
+    public ResponseEntity<HttpStatus> delete(@RequestHeader("user_id") int userId, @PathVariable("id") String id) {
+        organizationService.deleteOrganization(id, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

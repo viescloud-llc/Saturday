@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,11 +36,15 @@ public class Organization implements Serializable {
     private List<OUser> users = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ORole> roles = new ArrayList<>();;
+    private List<ORole> roles = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private OrganizationProfile organizationProfile;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private SMTP smtp;
+
+    @JsonIgnore
+    @Column(columnDefinition = "BIT(1) default false")
+    private boolean disable = false;
 }
