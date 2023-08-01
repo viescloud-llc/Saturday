@@ -65,7 +65,7 @@ class OrganizationController {
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Organization> update(@RequestHeader("user_id") int userId, @PathVariable("id") String id, @RequestBody Organization organization) {
-        organization = this.organizationService.modifyOrganization(id, organization);
+        organization = this.organizationService.modifyOrganization(id, organization, userId);
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ class OrganizationController {
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Organization> patch(@RequestHeader("user_id") int userId, @PathVariable("id") String id, @RequestBody Organization organization) {
-        organization = this.organizationService.patchOrganization(id, organization);
+        organization = this.organizationService.patchOrganization(id, organization, userId);
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
 
