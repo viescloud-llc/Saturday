@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import com.vincent.inc.Saturday.dao.OrganizationDao;
 import com.vincent.inc.Saturday.fiegn.AuthenticatorClient;
-import com.vincent.inc.Saturday.model.ERole;
-import com.vincent.inc.Saturday.model.EUser;
+import com.vincent.inc.Saturday.model.ORole;
+import com.vincent.inc.Saturday.model.OUser;
 import com.vincent.inc.Saturday.model.Organization;
 import com.vincent.inc.Saturday.model.Authentication.User;
 import com.vincent.inc.Saturday.util.DatabaseUtils;
@@ -78,14 +78,14 @@ public class OrganizationService {
     }
 
     public Organization createOrganization(Organization organization, int userId) {
-        List<ERole> roles = new ArrayList<>();
-        roles.add(ERole.builder().title("OWNER").active(true).build());
+        List<ORole> roles = new ArrayList<>();
+        roles.add(ORole.builder().title("OWNER").active(true).build());
         organization.setRoles(roles);
         var newOrganization = new Organization();
         ReflectionUtils.patchValue(newOrganization, organization);
         newOrganization = this.databaseUtils.saveAndExpire(newOrganization);
         roles = newOrganization.getRoles();
-        newOrganization.getUsers().add(new EUser(userId, roles));
+        newOrganization.getUsers().add(new OUser(userId, roles));
         newOrganization = this.databaseUtils.saveAndExpire(newOrganization);
 
         return newOrganization;
@@ -126,7 +126,7 @@ public class OrganizationService {
         return user;
     }
 
-    private void populateUser(EUser eUser, User user) {
+    private void populateUser(OUser eUser, User user) {
         eUser.setUserProfile(user.getUserProfile());
     }
 }

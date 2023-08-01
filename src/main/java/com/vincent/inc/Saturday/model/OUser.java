@@ -16,15 +16,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "e_user")
+@Table(name = "o_user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EUser extends User {
+public class OUser extends User {
 
     @Id
     private int id;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    private List<ERole> defineRole = new ArrayList<>();
+    private List<ORole> defineRole = new ArrayList<>();
 }

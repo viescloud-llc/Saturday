@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jakarta.ws.rs.QueryParam;
 import io.swagger.v3.oas.annotations.Operation;
 
 import com.vincent.inc.Saturday.model.Organization;

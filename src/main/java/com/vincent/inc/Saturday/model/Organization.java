@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -28,11 +29,11 @@ public class Organization implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<EUser> users = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<OUser> users = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ERole> roles = new ArrayList<>();;
+    private List<ORole> roles = new ArrayList<>();;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private OrganizationProfile organizationProfile;
