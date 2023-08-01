@@ -48,7 +48,7 @@ public class OrganizationProfile implements Serializable {
     private String state;
     
     @Column
-    private String zip;
+    private int zip;
 
     public OrganizationProfile() {
         this.socialMedias = new ArrayList<>();

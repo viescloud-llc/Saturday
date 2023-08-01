@@ -28,7 +28,7 @@ public class ORole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(length = 100)
     private String title;
 
     @Builder.Default

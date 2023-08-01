@@ -23,17 +23,29 @@ public class Permission implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
-    @Column(columnDefinition = "BIT(1) default false")
+    @Column(name = "all_permission",columnDefinition = "BIT(1) default false")
     private boolean all = false;
 
+    @Column(columnDefinition = "BIT(1) default false")
+    private boolean readOrganizationUser = false;
+
     @Column(columnDefinition = "BIT(1) default true")
-    private boolean read = true;
+    private boolean readOrganizationRole = true;
+
+    @Column(columnDefinition = "BIT(1) default false")
+    private boolean readOrganizationProfile = false;
+
+    @Column(columnDefinition = "BIT(1) default false")
+    private boolean readOrganizationSmtp = false;
     
     @Column(columnDefinition = "BIT(1) default false")
     private boolean modifyOrganizationUser = false;
 
     @Column(columnDefinition = "BIT(1) default false")
     private boolean modifyOrganizationRole = false;
+
+    @Column(columnDefinition = "BIT(1) default false")
+    private boolean modifyOrganizationProfile = false;
 
     @Column(columnDefinition = "BIT(1) default false")
     private boolean modifyOrganizationSmtp = false;

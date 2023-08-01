@@ -43,6 +43,6 @@ public class TimeModel extends Time implements Serializable {
     @Column
     private int second;
 
-    @Column
+    @Column(length = 100)
     private String status; //start or end
 }

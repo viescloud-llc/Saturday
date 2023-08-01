@@ -11,6 +11,7 @@ import com.vincent.inc.Saturday.fiegn.AuthenticatorClient;
 import com.vincent.inc.Saturday.model.ORole;
 import com.vincent.inc.Saturday.model.OUser;
 import com.vincent.inc.Saturday.model.Organization;
+import com.vincent.inc.Saturday.model.Permission;
 import com.vincent.inc.Saturday.model.Authentication.User;
 import com.vincent.inc.Saturday.util.DatabaseUtils;
 import com.vincent.inc.Saturday.util.ReflectionUtils;
@@ -79,7 +80,9 @@ public class OrganizationService {
 
     public Organization createOrganization(Organization organization, int userId) {
         List<ORole> roles = new ArrayList<>();
-        roles.add(ORole.builder().title("OWNER").active(true).build());
+        Permission permission = new Permission();
+        permission.setAll(true);
+        roles.add(ORole.builder().title("OWNER").active(true).permission(permission).build());
         organization.setRoles(roles);
         var newOrganization = new Organization();
         ReflectionUtils.patchValue(newOrganization, organization);
