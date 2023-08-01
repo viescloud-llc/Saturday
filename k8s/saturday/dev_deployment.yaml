@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saturday-dev-deployment
+  namespace: saturday-dev
+  labels:
+    app: saturday-dev
+spec:
+  selector:
+    matchLabels:
+      app: saturday-dev
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: saturday-dev
+    spec:
+      containers:
+      - name: saturday-dev
+        image: vincentbuiwork/saturday:dev
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 500M
+          limits:
+            memory: 1Gi
+        livenessProbe:
+          tcpSocket:
+            port: 83
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /_status/healthz
+            port: 83
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          successThreshold: 1
+          failureThreshold: 3
+          periodSeconds: 10
+        ports:
+        - containerPort: 83
+      restartPolicy: Always

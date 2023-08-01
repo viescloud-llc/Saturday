@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: saturday-stage-service
+  labels:
+    app: saturday-stage
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.24.24.110
+  externalIPs:
+  - 10.24.24.110
+  ports:
+  - name: http
+    port: 82 #local out port
+    protocol: TCP
+    targetPort: 82 # container port
+  selector:
+    app: saturday-stage #find all pod with app name
+  sessionAffinity: None
