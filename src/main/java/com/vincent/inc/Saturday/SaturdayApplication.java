@@ -30,6 +30,6 @@ public class SaturdayApplication {
 
 	@GetMapping("/_status/healthz")
 	public String healthCheck() {
-		return String.format("Authenticator %s is up and running", env);
+		return String.format("Saturday %s is up and running", env);
 	}
 }
