@@ -1,5 +1,6 @@
 package com.vincent.inc.Saturday.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -32,12 +34,18 @@ class OrganizationController {
 
     @Operation(summary = "Get a list of all Organization")
     @GetMapping
-    public ResponseEntity<List<Organization>> getAll(@RequestHeader("user_id") int userId) {
+    public ResponseEntity<List<?>> getAll(@RequestParam(name = "name", required = false) boolean nameOnly, @RequestHeader("user_id") int userId) {
         List<Organization> organizations = organizationService.getAll();
         organizations = organizations.parallelStream().filter(e -> e.getUsers().parallelStream().anyMatch(u -> u.getId() == userId)).collect(Collectors.toList());
-
+        
         if (organizations.isEmpty())
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        if(nameOnly) {
+            List<String> names = new ArrayList<>();
+            organizations.forEach(e -> names.add(e.getOrganizationProfile().getName()));
+            return new ResponseEntity<>(names, HttpStatus.OK); 
+        }
 
         return new ResponseEntity<>(organizations, HttpStatus.OK);
     }

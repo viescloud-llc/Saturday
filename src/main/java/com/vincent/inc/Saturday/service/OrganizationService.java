@@ -2,7 +2,6 @@ package com.vincent.inc.Saturday.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -192,7 +191,7 @@ public class OrganizationService {
             HttpResponseThrowers.throwBadRequest("User does not exist");
         return user;
     }
-
+ 
     private void populateUser(OUser eUser, User user) {
         eUser.setUserProfile(user.getUserProfile());
     }
