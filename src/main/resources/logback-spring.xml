@@ -2,7 +2,7 @@
 
     <property name="port" value="12201" />
     <property name="host" value="10.24.24.2" />
-    <property name="app_name" value="Authenticator" />
+    <property name="app_name" value="Saturday" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
