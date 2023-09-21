@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Calling venkins service') {
+            steps {
+                withCredentials([string(credentialsId: 'venkins-url', variable: 'venkinsUrl')]) {
+                    sh "curl --location --request PUT '${venkinsUrl}/job/multi' \
+                    --header 'Content-Type: application/json' \
+                    --data '@./vk.json'"
+                }
+            }
+        }
+    }
+}
