@@ -191,6 +191,13 @@ public class OrganizationService {
             HttpResponseThrowers.throwBadRequest("User does not exist");
         return user;
     }
+
+    public void populateUser(Organization organization) {
+        organization.getUsers().forEach(e -> {
+            var user = this.getUser(e.getId());
+            e.setUserProfile(user.getUserProfile());
+        });
+    }
  
     private void populateUser(OUser eUser, User user) {
         eUser.setUserProfile(user.getUserProfile());

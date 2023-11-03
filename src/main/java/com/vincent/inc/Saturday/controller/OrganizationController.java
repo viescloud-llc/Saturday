@@ -58,6 +58,8 @@ class OrganizationController {
         if(!this.organizationService.isInOrganization(organization, userId))
             HttpResponseThrowers.throwForbidden("User not allow to access this organization");
 
+        this.organizationService.populateUser(organization);
+
         return new ResponseEntity<>(organization, HttpStatus.OK);
     }
 
