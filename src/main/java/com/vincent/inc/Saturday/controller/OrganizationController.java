@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 import com.vincent.inc.Saturday.model.Organization;
 import com.vincent.inc.Saturday.service.OrganizationService;
-import com.vincent.inc.Saturday.util.Http.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.exception.HttpResponseThrowers;
 
 @RestController
 @RequestMapping("/organizations")

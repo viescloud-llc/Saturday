@@ -130,6 +130,13 @@
 			<version>4.3.1</version>
 		</dependency>
 
+		<!-- self host dependency -->
+		<dependency>
+			<groupId>com.vincent.inc</groupId>
+			<artifactId>vies-spring-utils</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -168,6 +175,13 @@
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
+		</repository>
+
+		<!--Your custom maven repo-->
+		<repository>
+			<id>reposilite-repository-releases</id>
+			<name>Reposilite Repository</name>
+			<url>http://10.24.24.61:8080/releases</url>
 		</repository>
 	</repositories>
 

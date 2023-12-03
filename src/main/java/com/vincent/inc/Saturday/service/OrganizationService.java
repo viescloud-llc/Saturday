@@ -15,9 +15,9 @@ import com.vincent.inc.Saturday.model.OUser;
 import com.vincent.inc.Saturday.model.Organization;
 import com.vincent.inc.Saturday.model.Permission;
 import com.vincent.inc.Saturday.model.Authentication.User;
-import com.vincent.inc.Saturday.util.DatabaseUtils;
-import com.vincent.inc.Saturday.util.ReflectionUtils;
-import com.vincent.inc.Saturday.util.Http.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.exception.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.util.DatabaseUtils;
+import com.vincent.inc.viesspringutils.util.ReflectionUtils;
 
 @Service
 public class OrganizationService {

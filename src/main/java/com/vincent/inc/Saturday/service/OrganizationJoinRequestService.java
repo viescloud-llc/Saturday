@@ -7,9 +7,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.data.domain.Example;
 import com.vincent.inc.Saturday.dao.OrganizationJoinRequestDao;
 import com.vincent.inc.Saturday.model.OrganizationJoinRequest;
-import com.vincent.inc.Saturday.util.DatabaseUtils;
-import com.vincent.inc.Saturday.util.ReflectionUtils;
-import com.vincent.inc.Saturday.util.Http.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.exception.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.util.DatabaseUtils;
+import com.vincent.inc.viesspringutils.util.ReflectionUtils;
 
 @Service
 public class OrganizationJoinRequestService {

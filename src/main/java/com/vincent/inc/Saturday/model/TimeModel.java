@@ -2,7 +2,7 @@ package com.vincent.inc.Saturday.model;
 
 import java.io.Serializable;
 
-import com.vincent.inc.Saturday.util.Time;
+import com.vincent.inc.viesspringutils.util.Time;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
