@@ -55,7 +55,7 @@ class OrganizationController {
     public ResponseEntity<Organization> getById(@RequestHeader("user_id") int userId, @PathVariable("id") String id) {
         Organization organization = organizationService.getById(id);
 
-        if(!this.organizationService.isInOrganization(organization, userId))
+        if(!OrganizationService.isInOrganization(organization, userId))
             HttpResponseThrowers.throwForbidden("User not allow to access this organization");
 
         this.organizationService.populateUser(organization);

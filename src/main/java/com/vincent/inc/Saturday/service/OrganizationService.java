@@ -106,7 +106,7 @@ public class OrganizationService {
     public Organization modifyOrganization(String id, Organization organization, int userId) {
         Organization oldOrganization = this.getById(id);
 
-        if(!this.isInOrganization(oldOrganization, userId))
+        if(!isInOrganization(oldOrganization, userId))
             HttpResponseThrowers.throwForbidden("User not allow to access this organization");
 
         if(this.haveModifyOrganizationAllPermission(oldOrganization, userId)) {
@@ -141,7 +141,7 @@ public class OrganizationService {
     public Organization patchOrganization(String id, Organization organization, int userId) {
         Organization oldOrganization = this.getById(id);
 
-        if(!this.isInOrganization(oldOrganization, userId))
+        if(!isInOrganization(oldOrganization, userId))
             HttpResponseThrowers.throwForbidden("User not allow to access this organization");
 
         if(this.haveModifyOrganizationAllPermission(oldOrganization, userId)) {
@@ -174,14 +174,14 @@ public class OrganizationService {
     public void deleteOrganization(String id, int userId) {
         Organization oldOrganization = this.getById(id);
 
-        if(!this.isInOrganization(oldOrganization, userId) || !this.haveModifyOrganizationAllPermission(oldOrganization, userId))
+        if(!isInOrganization(oldOrganization, userId) || !this.haveModifyOrganizationAllPermission(oldOrganization, userId))
             HttpResponseThrowers.throwForbidden("User not allow to access this organization or this action");
         
         oldOrganization.setDisable(true);
         oldOrganization = this.databaseUtils.saveAndExpire(oldOrganization);
     }
 
-    public boolean isInOrganization(Organization organization ,int userId) {
+    public static boolean isInOrganization(Organization organization ,int userId) {
         return organization.getUsers().parallelStream().anyMatch(u -> u.getId() == userId);
     }
 

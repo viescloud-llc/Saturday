@@ -1,16 +1,17 @@
 package com.vincent.inc.Saturday;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import com.vincent.inc.Saturday.model.OUser;
+import com.vincent.inc.Saturday.service.OrganizationService;
 
-@SpringBootTest
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class SaturdayApplicationTests {
 
 	@Test
 	void contextLoads() {
-		
+		log.info(OrganizationService.class.getName());
 	}
 
 }

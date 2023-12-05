@@ -1,7 +1,6 @@
 package com.vincent.inc.Saturday.model;
 
 import java.io.Serializable;
-import java.sql.Time;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
