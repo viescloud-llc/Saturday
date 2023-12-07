@@ -199,34 +199,53 @@ public class OrganizationService {
         });
     }
  
-    private void populateUser(OUser eUser, User user) {
+    public void populateUser(OUser eUser, User user) {
         eUser.setUserProfile(user.getUserProfile());
     }
 
-    private boolean haveModifyOrganizationAllPermission(Organization organization, int userId) {
+    public boolean haveModifyOrganizationAllPermission(Organization organization, int userId) {
         var user = this.getOUser(organization, userId);
         return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll());
     }
 
-    private boolean haveModifyOrganizationUserPermission(Organization organization, int userId) {
+    public boolean haveModifyOrganizationUserPermission(Organization organization, int userId) {
         var user = this.getOUser(organization, userId);
         return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationUser());
     }
 
-    private boolean haveModifyOrganizationRolePermission(Organization organization, int userId) {
+    public boolean haveModifyOrganizationRolePermission(Organization organization, int userId) {
         var user = this.getOUser(organization, userId);
         return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationRole());
     }
-    private boolean haveModifyOrganizationProfilePermission(Organization organization, int userId) {
+    public boolean haveModifyOrganizationProfilePermission(Organization organization, int userId) {
         var user = this.getOUser(organization, userId);
         return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isReadOrganizationProfile());
     }
-    private boolean haveModifyOrganizationSmtpPermission(Organization organization, int userId) {
+    public boolean haveModifyOrganizationSmtpPermission(Organization organization, int userId) {
         var user = this.getOUser(organization, userId);
         return user.getDefineRole().parallelStream().anyMatch(defineRole -> defineRole.getPermission().isAll() || defineRole.getPermission().isModifyOrganizationSmtp());
     }
 
-    private OUser getOUser(Organization organization, int userId) {
+    public OUser getOUser(Organization organization, int userId) {
         return organization.getUsers().parallelStream().filter(e -> e.getId() == userId).collect(Collectors.toList()).get(0);
+    }
+
+    public void addNewUser(int userId, Organization organization) {
+        var oRole = getNormalRoleElseAdd(organization);
+        organization.getUsers().add(new OUser(userId, List.of(oRole)));
+        this.databaseUtils.saveAndExpire(organization);
+    }
+
+    private ORole getNormalRoleElseAdd(Organization organization) {
+        var defineRoles = organization.getRoles();
+        var roles = defineRoles.stream().filter(e -> e.getTitle().toUpperCase().equals("NORMAL")).toList();
+        if(roles.size() > 0)
+            return roles.get(0);
+        else {
+            var role = ORole.builder().active(true).title("NORMAL").permission(new Permission()).build();
+            organization.getRoles().add(role);
+            organization = this.databaseUtils.saveAndExpire(organization);
+            return getNormalRoleElseAdd(organization);
+        }
     }
 }
