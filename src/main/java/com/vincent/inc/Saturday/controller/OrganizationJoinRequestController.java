@@ -62,6 +62,7 @@ public class OrganizationJoinRequestController {
     public ResponseEntity<OrganizationJoinRequest> create(@RequestHeader("user_id") int userId, @RequestBody OrganizationJoinRequest organizationJoinRequest) {
         if(OrganizationService.isInOrganization(organizationService.getById(organizationJoinRequest.getOrganizationId()), userId))
             HttpResponseThrowers.throwBadRequest("User already belong to the organization");
+        organizationJoinRequest.setUserId(userId);
         organizationJoinRequest.setTimeCreated((TimeModel) TimeModel.now());
         OrganizationJoinRequest savedOrganizationJoinRequest = organizationJoinRequestService.create(organizationJoinRequest);
         return new ResponseEntity<>(savedOrganizationJoinRequest, HttpStatus.CREATED);
