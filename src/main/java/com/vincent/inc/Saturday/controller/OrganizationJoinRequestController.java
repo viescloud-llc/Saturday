@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import io.swagger.v3.oas.annotations.Operation;
 
 import com.vincent.inc.Saturday.model.OrganizationJoinRequest;
+import com.vincent.inc.Saturday.model.TimeModel;
 import com.vincent.inc.Saturday.service.OrganizationJoinRequestService;
 import com.vincent.inc.Saturday.service.OrganizationService;
 import com.vincent.inc.viesspringutils.exception.HttpResponseThrowers;
+import com.vincent.inc.viesspringutils.util.Time;
 
 @RestController
 @RequestMapping("/organizationJoinRequests")
@@ -60,7 +62,7 @@ public class OrganizationJoinRequestController {
     public ResponseEntity<OrganizationJoinRequest> create(@RequestHeader("user_id") int userId, @RequestBody OrganizationJoinRequest organizationJoinRequest) {
         if(OrganizationService.isInOrganization(organizationService.getById(organizationJoinRequest.getOrganizationId()), userId))
             HttpResponseThrowers.throwBadRequest("User already belong to the organization");
-        
+        organizationJoinRequest.setTimeCreated((TimeModel) TimeModel.now());
         OrganizationJoinRequest savedOrganizationJoinRequest = organizationJoinRequestService.create(organizationJoinRequest);
         return new ResponseEntity<>(savedOrganizationJoinRequest, HttpStatus.CREATED);
     }
